@@ -1,0 +1,25 @@
+services:
+  kidcanlabel:
+    image: kidcanlabel:v0.0.1
+    build: 
+      context: .
+      dockerfile: docker/dockerfile
+    stdin_open: true
+    tty: true
+    working_dir: "/workspace"
+    network_mode: "host"
+    volumes:
+      - $PWD:/workspace
+      - /tmp/.X11-unix:/tmp/.X11-unix
+    devices:
+      - /dev/video0:/dev/video0
+    environment:
+      - DISPLAY=$DISPLAY
+    command: /bin/bash
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
